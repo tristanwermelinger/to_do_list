@@ -19,7 +19,7 @@ app.post("/create", async (req, res) => {
       name: req.body.name,
     });
     await newToDo.save();
-    res.status(201).json({ message: "Created" });
+    res.status(201).json({ message: "New task created" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -31,6 +31,33 @@ app.get("/", async (req, res) => {
     res.json(tasks);
   } catch (error) {
     res.status(400).json({ message: error.message });
+  }
+});
+
+app.put("/update", async (req, res) => {
+  try {
+    if (req.body.name && req.body.id) {
+      const task = await ToDo.findById(req.body.id);
+      task.name = req.body.name;
+      await task.save();
+      res.json({ message: "Task updated" });
+    }
+  } catch (error) {
+    res.status(418).json({ message: error.message });
+  }
+});
+
+app.delete("/delete", async (req, res) => {
+  try {
+    if (req.body.id && req.body.name) {
+      const task = await ToDo.findById(req.body.id);
+      task.name = req.body.name;
+      await task.remove();
+    } else {
+      res.status(406).json({ message: "Parameter is missing" });
+    }
+  } catch (error) {
+    res.status(418).json({ message: error.message });
   }
 });
 
