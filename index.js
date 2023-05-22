@@ -49,10 +49,11 @@ app.put("/update", async (req, res) => {
 
 app.delete("/delete", async (req, res) => {
   try {
-    if (req.body.id && req.body.name) {
+    if (req.body.id) {
       const task = await ToDo.findById(req.body.id);
-      task.name = req.body.name;
-      await task.remove();
+      console.log(task);
+      await task.deleteOne();
+      res.json({ message: "File Deleted" });
     } else {
       res.status(406).json({ message: "Parameter is missing" });
     }
